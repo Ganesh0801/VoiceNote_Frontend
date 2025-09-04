@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   deleteNoteRequest,
   generateSummaryRequest,
-  fetchNotesRequest
 } from "../redux/noteSlice.js";
 import NoteForm from "./NoteForm.js";
 import { useNotify } from "./NotificationProvider.js";
@@ -51,11 +50,8 @@ const NoteList = ({ notes, setNotes }) => {
   return (
     <List sx={{ px: 0 }}>
       {notes.map((note) => {
-        const isSummaryDisabled =
-          !!note.summary && note.transcript === note.summary;
-
+        const isSummaryDisabled = !!note.summary && note.transcript === note.summary;
         const summaryLoading = !!summaryLoadingById[note._id];
-
         const isLoading = generalLoading || summaryLoading;
 
         return (
@@ -112,33 +108,33 @@ const NoteList = ({ notes, setNotes }) => {
               </Stack>
 
               <Box sx={{ mt: 3 }}>
-                {!note.summary ? (
-                  <Button
-                    variant="outlined"
-                    startIcon={
-                      summaryLoading ? (
-                        <CircularProgress size={20} />
-                      ) : (
-                        <Summarize />
-                      )
-                    }
-                    onClick={() => handleSummarize(note)}
-                    disabled={
-                      summaryLoading || isSummaryDisabled || generalLoading
-                    }
-                    color="info"
-                    sx={{
-                      textTransform: "none",
-                      borderRadius: 3,
-                      fontWeight: 600,
-                      boxShadow: "0 2px 8px #90caf914",
-                      transition: "background-color 0.3s ease",
-                      "&:hover": { backgroundColor: "#bbdefb99" },
-                    }}
-                  >
-                    {summaryLoading ? "Generating..." : "Generate Summary"}
-                  </Button>
-                ) : (
+                <Button
+                  variant="outlined"
+                  startIcon={
+                    summaryLoading ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <Summarize />
+                    )
+                  }
+                  onClick={() => handleSummarize(note)}
+                  disabled={
+                    summaryLoading || isSummaryDisabled || generalLoading || !!note.summary
+                  }
+                  color="info"
+                  sx={{
+                    textTransform: "none",
+                    borderRadius: 3,
+                    fontWeight: 600,
+                    boxShadow: "0 2px 8px #90caf914",
+                    transition: "background-color 0.3s ease",
+                    "&:hover": { backgroundColor: "#bbdefb99" },
+                  }}
+                >
+                  {summaryLoading ? "Generating..." : "Generate Summary"}
+                </Button>
+
+                {!!note.summary && (
                   <>
                     <Typography
                       variant="subtitle2"
